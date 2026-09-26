@@ -12,7 +12,7 @@ Prototype. Not yet on M5Burner or in Rill Sound.
 
 ## Sound
 
-Mallet's composer (itself Rill's) writes the music: phrases that develop, answers, harmony, delay and room. The voice layer is formant synthesis. A glottal pulse runs through four cascaded resonators that glide from a consonant to a vowel. The consonants are all voiced ones (d, b, n, m, l), made from closure and formant motion rather than noise. The vocoder is a saw carrier through a ten-band filter bank that follows the same vowels.
+The composer is the one the Rill melodic instruments share: phrases that develop, answering lines, a support part, shifting harmony, delay and room. The voice layer is formant synthesis. A glottal pulse runs through four cascaded resonators that glide from a consonant to a vowel. The consonants are all voiced ones (d, b, n, m, l), made from closure and formant motion rather than noise. The vocoder is a saw carrier through a ten-band filter bank that follows the same vowels.
 
 Each part (lead, answer, support) is one monophonic singer, so a line is sung legato from note to note. Each piece picks one vocabulary (da di doh doom, la li lo loo, na ni no, ah eh oh) and a repeated phrase is sung the same way each time.
 
