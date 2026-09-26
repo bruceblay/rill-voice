@@ -510,7 +510,7 @@ class Painting {
       // centres above and below. Growing both radii by the same amount
       // offsets the whole outline evenly, so the lid line is one thickness
       // all the way round, corners and middle alike, open or blinking.
-      const float w = e.size * 0.92f, t = std::max(1.6f, e.size * 0.13f);
+      const float w = e.size * 0.92f, t = std::max(1.2f, e.size * 0.09f);
       const float hh = std::max(0.3f, e.size * 0.46f * open);
       const float radius = (w * w + hh * hh) / (2 * hh), offset = radius - hh;
       vesica(e.x, e.y, radius + t, offset, inkOf(e.tint, fade));
