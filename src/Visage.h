@@ -187,6 +187,36 @@ class Painting {
       if (left <= right) span(y, left, right, c);
     }
   }
+  // A vesica: where two discs of one radius overlap, their centres `offset`
+  // above and below the middle. Its half-extent on a row `v` from the middle.
+  float vesicaExtent(float v, float radius, float offset) const {
+    const float a = radius * radius - (v - offset) * (v - offset);
+    const float b = radius * radius - (v + offset) * (v + offset);
+    if (a <= 0 || b <= 0) return -1;
+    return std::sqrt(std::min(a, b));
+  }
+  void vesica(float cx, float cy, float radius, float offset, uint16_t c) {
+    const float half = radius - offset;
+    int top = std::max(0, int(std::floor(cy - half))), bottom = std::min(int(height) - 1, int(std::ceil(cy + half)));
+    for (int y = top; y <= bottom; ++y) {
+      float e = vesicaExtent(float(y) + 0.5f - cy, radius, offset);
+      if (e >= 0) span(y, int(std::ceil(cx - e)), int(std::floor(cx + e)), c);
+    }
+  }
+  // An iris behind the lids: a disc seen only where it falls inside the eye.
+  void discInVesica(float dx, float dy, float r, float cx, float cy, float radius, float offset, uint16_t c) {
+    int top = std::max(0, int(std::floor(dy - r))), bottom = std::min(int(height) - 1, int(std::ceil(dy + r)));
+    for (int y = top; y <= bottom; ++y) {
+      float v = (float(y) + 0.5f - dy) / r;
+      if (std::abs(v) > 1) continue;
+      float e = vesicaExtent(float(y) + 0.5f - cy, radius, offset);
+      if (e < 0) continue;
+      float d = r * std::sqrt(1 - v * v);
+      int left = std::max(int(std::ceil(dx - d)), int(std::ceil(cx - e)));
+      int right = std::min(int(std::floor(dx + d)), int(std::floor(cx + e)));
+      if (left <= right) span(y, left, right, c);
+    }
+  }
   // A stroke with round ends at any angle: fingers, arms, brows.
   void capsule(float ax, float ay, float bx, float by, float r, uint16_t c) {
     int x0 = std::max(0, int(std::floor(std::min(ax, bx) - r))), x1 = std::min(int(width) - 1, int(std::ceil(std::max(ax, bx) + r)));
@@ -476,17 +506,22 @@ class Painting {
       if (e.blink > 0) open *= std::abs(e.blink - 0.1f) * 10;
       float fade = std::max(0.0f, (e.age - 1.5f) / (e.life - 1.5f));
       fade = fade * fade * 0.85f;
-      const float w = e.size, h = e.size * 0.46f;
-      // The lids, then the eye's white (the paper), then the iris behind them.
-      lens(e.x, e.y, w * 1.1f, h * (0.35f + 0.75f * open), inkOf(e.tint, fade));
+      // The eye is a vesica: two circular arcs, one for each lid, their
+      // centres above and below. Growing both radii by the same amount
+      // offsets the whole outline evenly, so the lid line is one thickness
+      // all the way round, corners and middle alike, open or blinking.
+      const float w = e.size * 0.92f, t = std::max(1.6f, e.size * 0.13f);
+      const float hh = std::max(0.3f, e.size * 0.46f * open);
+      const float radius = (w * w + hh * hh) / (2 * hh), offset = radius - hh;
+      vesica(e.x, e.y, radius + t, offset, inkOf(e.tint, fade));
       if (open > 0.08f) {
-        const float hw = w * 0.92f, hh = h * open;
-        lens(e.x, e.y, hw, hh, ground);
+        vesica(e.x, e.y, radius, offset, ground);
         float dx = gazeX - e.x, dy = gazeY - e.y;
         float d = std::sqrt(dx * dx + dy * dy) + 1;
-        float ix = e.x + dx / d * w * 0.3f, iy = e.y + dy / d * h * 0.3f;
-        discInLens(ix, iy, h * 0.95f, e.x, e.y, hw, hh, inkOf(e.tint + 1, fade));
-        discInLens(ix, iy, h * 0.42f, e.x, e.y, hw, hh, inkOf(e.tint + 2, fade * 0.5f));
+        const float h = e.size * 0.46f;
+        float ix = e.x + dx / d * w * 0.33f, iy = e.y + dy / d * h * 0.3f;
+        discInVesica(ix, iy, h * 0.95f, e.x, e.y, radius, offset, inkOf(e.tint + 1, fade));
+        discInVesica(ix, iy, h * 0.42f, e.x, e.y, radius, offset, inkOf(e.tint + 2, fade * 0.5f));
       }
     }
   }
