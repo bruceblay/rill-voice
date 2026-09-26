@@ -58,7 +58,7 @@ class Painting {
   std::array<uint16_t, width * height> frame{};
   std::array<float, 257> wave{};
   uint32_t rng = 1, evolutionRng = 1;
-  unsigned character = 0, palette = 0, count = 0, hairStyle = 0;
+  unsigned character = 0, previous = 0, palette = 0, count = 0, hairStyle = 0;
   float phase = 0, breath = 0;
   std::array<float, 8> evolving{}, goals{}, variant{};
   float evolutionAt = 0;
@@ -761,9 +761,17 @@ class Painting {
   }
   // Open on the portrait: one face singing is the clearest first sight of
   // what this instrument is. Every later change picks another character.
+  // Later changes skip both the character showing and the one before it:
+  // skipping only the current one went back to the last one a fifth of the
+  // time, and two visuals would trade places tap after tap.
   void regenerate() {
     const unsigned choice = random();
-    character = count ? (character + 1 + choice % (characterCount - 1)) % characterCount : Portrait;
+    if (!count) { previous = character = Portrait; arrange(); return; }
+    unsigned options[characterCount], n = 0;
+    for (unsigned c = 0; c < characterCount; ++c)
+      if (c != character && c != previous) options[n++] = c;
+    previous = character;
+    character = options[choice % n];
     arrange();
   }
   void arrange() {
