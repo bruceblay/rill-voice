@@ -724,9 +724,11 @@ class Painting {
     const unsigned counted = packed >> 24;
     if (counted != m.count) { m.count = counted; m.fresh = true; }
   }
+  // Open on the portrait: one face singing is the clearest first sight of
+  // what this instrument is. Every later change picks another character.
   void regenerate() {
     const unsigned choice = random();
-    character = count ? (character + 1 + choice % (characterCount - 1)) % characterCount : Rubin;
+    character = count ? (character + 1 + choice % (characterCount - 1)) % characterCount : Portrait;
     arrange();
   }
   void arrange() {
