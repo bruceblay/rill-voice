@@ -25,6 +25,9 @@
 // Bounded and deterministic, with no allocation or locks. Coefficients are
 // recomputed every 32 samples; the per-sample path has no transcendental
 // functions.
+#ifndef RILL_VOICE_DRIVE
+#define RILL_VOICE_DRIVE 8.5f
+#endif
 namespace voice {
 constexpr uint32_t rate = 32000;
 constexpr float pi = 3.14159265358979323846f;
@@ -886,9 +889,10 @@ class Engine {
     dcIn = mix; dcOut = clean;
     polish += 0.55f * (clean - polish);
     level += (target - level) / (rate * 0.7f);
-    // Louder than Mallet's 2.4: a voice sits in the middle of a small
-    // speaker's range and wants to be forward in the ensemble.
-    float x = polish * level * sceneGain * 8.5f;
+    // Driven hard for the StickS3's small speaker, where anything gentler
+    // was hard to hear. On full-range speakers that reads as aggressive, so
+    // the browser build defines a gentler drive of its own.
+    float x = polish * level * sceneGain * RILL_VOICE_DRIVE;
     return x / (1 + std::abs(x));
   }
   void render(int16_t* output, unsigned count) {
