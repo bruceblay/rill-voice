@@ -1,55 +1,92 @@
-<img src="docs/images/characters.png" alt="The six Rill Voice visuals: Trio, Rubin, Eyes, Carriage, Windows and Portrait" width="800">
+<img src="docs/images/characters.png" alt="All six Rill Voice visuals: Portrait, Trio and Rubin across the top; Eyes, Carriage and Windows below" width="800">
 
 # Rill Voice
 
 **rill** /rɪl/ *noun*: a small stream or a tiny, shallow channel cut into soil by running water.
 
-A generative vocal instrument for the **M5Stack StickS3**. Six synthesized singers (alto, bass, choir, falsetto, tenor and vocoder) sing evolving melodies in scat and vocables, "da di doh", "loo", "mm", never words. Six visual characters of faces, eyes and people sing along with what you hear. Tap for a new piece. Shake for a new visual.
+A generative vocal instrument for the **M5Stack StickS3**. Six synthesized singers (alto, bass, choir, falsetto, tenor and vocoder) sing evolving melodies in wordless scat and vocables such as "da di doh", "loo" and "mm", while six visuals of faces, eyes and people sing along. Tap for a new piece. Shake for a new visual.
 
-Prototype. Not yet on M5Burner or in Rill Sound.
+[Play Rill Voice](https://rillsound.com/voice) · [Build and install](#build-and-install)
 
-**Rill family:** [Synth](https://github.com/bruceblay/rill-synth) · [Mallet](https://github.com/bruceblay/rill-mallet) · [World](https://github.com/bruceblay/rill-world) · [Drums](https://github.com/bruceblay/rill-drums) · [Rill Sound](https://rillsound.com)
+**Rill family:** [Voice](https://github.com/bruceblay/rill-voice) · [Synth](https://github.com/bruceblay/rill-synth) · [Mallet](https://github.com/bruceblay/rill-mallet) · [World](https://github.com/bruceblay/rill-world) · [Drums](https://github.com/bruceblay/rill-drums) · [Rill Sound](https://rillsound.com)
+
+## Visuals
+
+Six visuals, drawn separately from the singer. The device opens on Portrait; after that, a new piece or a shake picks any visual except the one showing and the one before it.
+
+| Portrait | Trio |
+| --- | --- |
+| ![Portrait](docs/images/portrait.png) | ![Trio](docs/images/trio.png) |
+| **Rubin** | **Eyes** |
+| ![Rubin](docs/images/rubin.png) | ![Eyes](docs/images/eyes.png) |
+| **Carriage** | **Windows** |
+| ![Carriage](docs/images/carriage.png) | ![Windows](docs/images/windows.png) |
+
+*Actual 240 × 135 renderer captures driven by the Voice engine. Regenerate with `python3 tools/screenshots.py`.*
+
+- **Portrait**: one large face singing the lead. Brows rise with the pitch, the eyes glance toward where the melody sits and close on long notes, and breath rings drift from the lips.
+- **Trio**: three singers, one to a part: the support on the left, the lead in the middle, the answer on the right.
+- **Rubin**: two profiles facing, and the vase between them. The lead sings on the left and the other parts on the right.
+- **Eyes**: an eye opens for each note, at a column set by pitch. They blink, look toward the newest, then close and fade back into the paper.
+- **Carriage**: passengers on a commuter train, the town sliding past the windows. Three of them are the three parts and sing; the others doze or read.
+- **Windows**: a street of buildings, each part a singer at a window. A part moves to a new window, chosen by pitch, when it starts a new phrase.
+
+They are drawn in Rill's language: flat opaque shapes with hard edges on a coloured ground, with eyes and mouths cut out to show the ground. The singing drives them: the engine reports each part's mouth, so a face opens tall on "ah", thins to a slit on "ee", rounds on "oo" and closes for the "m" of "doom".
+
+## Play
+
+| Gesture | Action |
+| --- | --- |
+| Front button: tap | Generate a new piece with a new singer and visual |
+| Front button: hold for about 0.65 seconds | Fade sound out or in |
+| Side button: tap | Cycle volume and show the data view |
+| Side button: hold | Slow the whole ensemble by 4 BPM, starting on the bar after next; below 52 it comes round to 100 |
+| Shake | Select a new visual without changing the music |
+
+Near other Rill devices (Voice, Synth, Mallet, Drums or World) it joins an ensemble over ESP-NOW with no setup: every device plays on the shared tempo and bar line, and a new piece on a Voice, Synth or Mallet proposes its key to the others. In an ensemble a tap waits for the next shared bar. See [how it works](https://github.com/bruceblay/rill-synth/blob/main/SYNC-DESIGN.md).
 
 ## Sound
 
 The composer is the one the Rill melodic instruments share: phrases that develop, answering lines, a support part, shifting harmony, delay and room. The voice layer is formant synthesis. A glottal pulse runs through four cascaded resonators that glide from a consonant to a vowel. The consonants are all voiced ones (d, b, n, m, l), made from closure and formant motion rather than noise. The vocoder is a saw carrier through a ten-band filter bank that follows the same vowels.
 
-Each part (lead, answer, support) is one monophonic singer, so a line is sung legato from note to note. Each piece picks one vocabulary (da di doh doom, la li lo loo, na ni no, ah eh oh) and a repeated phrase is sung the same way each time.
+Each part (lead, answer, support) is one singer, so a line is sung from note to note with a glide rather than struck. Each piece picks one set of syllables (da di doh doom, ba di bo boom, na ni no noo, la li lo loo, doo di doo doom, or ah eh oh) and a repeated phrase is sung the same way each time.
 
-## Visuals
+## Hardware
 
-Flat cut-paper figures on Rill's daylight palettes, with eyes and mouths cut back to the paper. Mouths follow the engine's actual vowels: open on "ah", a slit on "ee", round on "oo", shut for the "m" of "doom".
-
-- **Trio**: three singers, one to a part.
-- **Rubin**: two profiles facing, and the vase between them.
-- **Eyes**: an eye opens for each note, looks toward the newest and fades.
-- **Carriage**: passengers on a commuter train, three of them singing.
-- **Windows**: a street at evening, a singer at a window for each part.
-- **Portrait**: one large face singing the lead.
-
-## Controls
-
-| Control | Action |
-| --- | --- |
-| Front button: tap | New piece |
-| Front button: hold | Fade sound out or in |
-| Side button: tap | Cycle volume |
-| Side button: hold | Slow the ensemble a step |
-| Shake | New visual |
-
-## Ensemble
-
-Voice uses the same ESP-NOW sync as Synth, Mallet, World and Drums (protocol version 2), sharing tempo, bar line and key with them.
+Built for the **M5Stack StickS3**, with ESP32-S3, 8 MB flash, display, IMU and built-in speaker. Everything is synthesized; there are no samples, so the default partition table is enough. The output is driven hard for the small speaker, and the Rill Sound browser build drives it more gently.
 
 ## Build and install
 
 ```sh
-python3 tools/test.py
-python3 tools/flash.py --port /dev/cu.usbmodemXXXX
+python -m pip install -r requirements-dev.txt
+pio run
+python tools/flash.py --port YOUR_DEVICE_PORT
 ```
 
-`tools/render.cpp` writes a WAV of one singer; `tools/visual_preview.cpp` renders one visual character driven by the engine.
+Rill Voice is not on M5Burner yet.
 
-## License
+## Develop without hardware
 
-GPL-3.0-or-later.
+```sh
+python tools/test.py
+mkdir -p build
+c++ -std=c++17 -O2 tools/render.cpp -o build/render
+build/render build/voice.wav 60 42
+```
+
+Arguments are output path, seconds, seed, and optional singer (0–5: alto, bass, choir, falsetto, tenor, vocoder). `tools/visual_preview.cpp` renders one visual driven by the engine.
+
+## Project layout
+
+- `src/Voice.h`: the shared Rill composer with a formant-singing voice layer
+- `src/Visage.h`: the six visuals, and the mouth protocol they read
+- `src/main.cpp`: audio, display, buttons, motion and ensemble tasks
+- `src/Ensemble.h`, `src/Radio.h`: the family's ESP-NOW ensemble sync
+- `tools/`: tests, WAV rendering, visual previews, screenshots and flashing
+- `tests/`: host verification of the grid, the singing and the visual choice
+
+## Credits and license
+
+Created by Bruce Blay.
+
+GPL-3.0-or-later. See [LICENSE](LICENSE).
