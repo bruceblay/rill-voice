@@ -6,7 +6,7 @@
 
 A generative vocal instrument for the **M5Stack StickS3**. Six synthesized singers (alto, bass, choir, falsetto, tenor and vocoder) sing evolving melodies in wordless scat and vocables such as "da di doh", "loo" and "mm", while six visuals of faces, eyes and people sing along. Tap for a new piece. Shake for a new visual.
 
-[Play Rill Voice](https://rillsound.com/voice) · [Build and install](#build-and-install)
+[Play Rill Voice](https://rillsound.com/voice) · [M5Burner submission](https://burner.m5stack.com/firmware/2104980220002824193) · [Build and install](#build-and-install)
 
 **Rill family:** [Voice](https://github.com/bruceblay/rill-voice) · [Synth](https://github.com/bruceblay/rill-synth) · [Mallet](https://github.com/bruceblay/rill-mallet) · [World](https://github.com/bruceblay/rill-world) · [Drums](https://github.com/bruceblay/rill-drums) · [Rill Sound](https://rillsound.com)
 
@@ -57,6 +57,8 @@ Built for the **M5Stack StickS3**, with ESP32-S3, 8 MB flash, display, IMU and b
 
 ## Build and install
 
+**Firmware 0.1.0** was submitted to M5Burner on September 29, 2026 and is awaiting review. The first store release is not public yet.
+
 Install Python 3.11 or later, then run these commands from the repository root:
 
 ```sh
@@ -74,7 +76,6 @@ python tools/flash.py --port YOUR_DEVICE_PORT
 
 Flashing replaces the current firmware and settings.
 
-Rill Voice is not on M5Burner yet.
 
 ## Develop without hardware
 
