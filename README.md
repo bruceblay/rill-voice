@@ -57,11 +57,22 @@ Built for the **M5Stack StickS3**, with ESP32-S3, 8 MB flash, display, IMU and b
 
 ## Build and install
 
+Install Python 3.11 or later, then run these commands from the repository root:
+
 ```sh
+python3 -m venv .venv
+source .venv/bin/activate
 python -m pip install -r requirements-dev.txt
 pio run
+```
+
+On Windows, activate with `.venv\Scripts\activate` instead. Connect the StickS3 with a USB data cable, locate its port with `pio device list`, then install:
+
+```sh
 python tools/flash.py --port YOUR_DEVICE_PORT
 ```
+
+Flashing replaces the current firmware and settings.
 
 Rill Voice is not on M5Burner yet.
 
